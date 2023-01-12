@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from passowrdData import *
 import random as rd
+import pyperclip
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 
@@ -19,16 +20,14 @@ def generate():
     password.extend([rd.choice(NUMBERS) for _ in range(rd.randint(2, 4))])
     password.extend([rd.choice(SYMBOLS) for _ in range(rd.randint(2, 4))])
 
-    final_password = ""
     checking = True
     while checking:
         rd.shuffle(password)
         checking = check_pass_symbols(password)
 
-    for x in password:
-        final_password += x
-
-    password_entry.insert(0, final_password)
+    password = "".join(password)
+    pyperclip.copy(password)
+    password_entry.insert(0, password)
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 
@@ -54,7 +53,7 @@ def save():
     elif len(password) < 8:
         messagebox.showinfo(title="Password too short", message="Your password must have a length of at least 8\n\n"
                                                                 "Please pick a different password")
-        password_entry.focus(END)
+        password_entry.focus()
     else:
         ok_to_save = messagebox.askyesno(title="Data check",
                                          message=f"There are the details entered:\n\nWebsite: {website}\nUsername: "
@@ -67,6 +66,7 @@ def save():
                 # username_entry.delete(0, END)
                 password_entry.delete(0, END)
                 website_entry.focus()
+                pyperclip.copy(password)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
